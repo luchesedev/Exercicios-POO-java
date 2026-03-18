@@ -1,40 +1,54 @@
+import javax.swing.*;
 import java.util.Scanner;
 import java.util.concurrent.TimeUnit;
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+
 public class Main {
     public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-
-        // exercicio lista dois 1
-
         int escolha = 1;
         Scanner sc = new Scanner(System.in);
         int novaescolha;
+
+        // Força o Java a usar o LookAndFeel do sistema (evita janelas escondidas)
+
+
         while (escolha != 0) {
-            //da um tempo de 2 segundos
+            // USANDO JANELA PARA O MENU: Isso mata o loop infinito do console!
+            String menu = "--- MENU DE EXERCÍCIOS ---\n" +
+                    "1 - Frase Reversa\n" +
+                    "2 - Escada de Palavras\n" +
+                    "9 - Classes (Computador/Eleitoral/Lâmpada)\n" +
+                    "10 - População (Matriz)\n" +
+                    "0 - Sair\n\n" +
+                    "Digite sua escolha:";
+
+            String inputMenu = JOptionPane.showInputDialog(null, menu);
+
+            if (inputMenu == null) break; // Se clicar em Cancelar, sai
             try {
-                TimeUnit.SECONDS.sleep(2);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
+                escolha = Integer.parseInt(inputMenu);
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(null, "Digite apenas números!");
+                continue;
             }
-            System.out.println("escolha o exercicio");
-            escolha =sc.nextInt();
+
             switch (escolha) {
                 case 0:
-                    System.out.println("Fim do programa");
+                    JOptionPane.showMessageDialog(null, "Fim do programa!");
                     break;
+
                 case 1:
+                    // Se o exercício pede console, o Scanner vai funcionar aqui
+                    System.out.println("Digite a frase no CONSOLE:");
                     StringBuilder frasereversa = new StringBuilder(sc.next());
-                    System.out.println(frasereversa.reverse());
+                    System.out.println("Resultado: " + frasereversa.reverse());
+                    sc.nextLine(); // Limpa o buffer
                     break;
+
                 case 2:
+                    System.out.println("Digite a palavra no CONSOLE:");
                     String palavra = sc.next();
                     int num = palavra.length();
-                    char[] frase = new char[num];
-                    frase = palavra.toCharArray();
-
+                    char[] frase = palavra.toCharArray();
                     String nova = "";
                     for (int i = 0; i < num; i++) {
                         nova += frase[i];
@@ -42,74 +56,54 @@ public class Main {
                     }
                     for (int i = num - 1; i >= 0; i--) {
                         StringBuilder sb = new StringBuilder(nova);
-                        sb.deleteCharAt(i); // Remove o caractere na posição exata i
+                        sb.deleteCharAt(i);
                         nova = sb.toString();
                         System.out.println(nova);
                     }
+                    sc.nextLine();
+                    break;
 
                 case 9:
-                    //CLASSES COMPUTADOR,ELEITORAL,LAMPADA
-                    //exercicio 1a/b da lista nove
-                    System.out.println("exercicio um : 1 \nexercicio dois : 2 \nexercicio tres : 3" );
+                    System.out.println("Escolha (1-3) no CONSOLE:");
                     novaescolha = sc.nextInt();
-                    if ( novaescolha == 1) {
+                    sc.nextLine();
+                    if (novaescolha == 1) {
                         Computador computador = new Computador();
-                        //definindo sem contrutor;
-                        //atributos: marca, cor, modelo, serie e valor;
-                        System.out.println("Digite a marca ");
-                        computador.setMarca(sc.next());
-                        System.out.println("Digite a cor ");
-                        computador.setCor(sc.next());
-                        System.out.println("Digite a modelo ");
-                        computador.setModelo(sc.next());
-                        System.out.println("Digite a serie ");
-                        computador.setSerie(sc.next());
-                        System.out.println("Digite a valor ");
-                        computador.setValor(sc.nextDouble());
-                        //com valor o contrutor seria praticamente a mesma coisa so que sem o set e ja que voce da um "set" com os parametro do construtor voce apenas chamaria o metodo imprimirdados()
+                        System.out.println("Marca:"); computador.setMarca(sc.nextLine());
+                        System.out.println("Valor:"); computador.setValor(sc.nextDouble());
+                        sc.nextLine();
                         computador.imprimirdados();
-                        break;
+                    } else if (novaescolha == 2) {
+                        System.out.println("Nome:"); String nome = sc.next();
+                        System.out.println("Idade:"); int idade = sc.nextInt();
+                        sc.nextLine();
+                        Eleitoral el = new Eleitoral(nome, idade);
+                        el.imprimir();
+                    } else if (novaescolha == 3) {
+                        Lampada l1 = new Lampada(); l1.ligar(); l1.observar();
                     }
-                    else if (novaescolha == 2){
-                        System.out.println("digite seu nome");
-                        String nome = sc.next();
-                        System.out.println("digite sua idade");
-                        int idade = sc.nextInt();
+                    break;
 
-                        Eleitoral eleitoral = new Eleitoral(nome , idade);
+                case 10:
+                    Populacao pop = new Populacao(4, 5);
+                    for (int i = 0; i < 4; i++) {
+                        for (int j = 0; j < 5; j++) {
+                            String inputPop = JOptionPane.showInputDialog(null,
+                                    "Estado " + (i + 1) + " | Cidade " + (j + 1) + "\nDigite a população:");
 
-                        System.out.println("verificando....");
-                        try {
-                            TimeUnit.SECONDS.sleep(2);
-                        } catch (InterruptedException e) {
-                            Thread.currentThread().interrupt();
+                            if (inputPop != null && !inputPop.isEmpty()) {
+                                pop.atualizarPopulacao(i, j, Integer.parseInt(inputPop));
+                            }
                         }
-
-                        System.out.println("Pronto!");
-                        eleitoral.imprimir();
                     }
-                    else if(novaescolha == 3){
-                        Lampada lampada1 = new Lampada();
-                        Lampada lampada2 = new Lampada();
-
-                        lampada1.ligar();
-                        lampada2.desligar();
-
-                        System.out.print("lampada 1 :");
-                        lampada1.observar();
-                        System.out.print("lampada 2 :");
-                        lampada2.observar();
-                    }
-                    else{
-                        System.out.println("exercicio invalido");
-                    }
+                    JOptionPane.showMessageDialog(null,pop.mediaPop());
                     break;
+
                 default:
-                    System.out.println("numero invalido digite novamente:");
-                    escolha = sc.nextInt();
+                    JOptionPane.showMessageDialog(null, "Opção inválida!");
                     break;
-
             }
         }
-        }
+        System.exit(0); // Garante que o processo feche de verdade
     }
+}
